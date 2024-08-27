@@ -11,6 +11,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +25,10 @@ public class Community {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(updatable = false)
 	private Long id;
+	
+	@JoinColumn(name="creator_id")
+	@ManyToOne
+	private User creator;
 	
 	@Column(nullable=false)
 	private String content;

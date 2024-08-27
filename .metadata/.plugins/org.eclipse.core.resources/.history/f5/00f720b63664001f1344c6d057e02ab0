@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www,thymeleaf.org"
+	xmlns:sec="http://thymeleaf.org/extras/spring-secutity"
+>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	메인 페이지
+	<form sec:authorize="!isAuthenticated()" action="/login" method="POST">
+		<input type="username" name="username" placeholder="username을 입력" />
+		<input type="password" name="password" placeholder="비밀번호 입력" />
+		<button>로그인</button>
+		<a href="/join">회원가입</a>
+	</form>
+	
+	<form sec:authorize="isAuthenticated()" action="/logout" method="POST">
+		<button>로그아웃</button>
+	</form>
+</body>
+</html>

@@ -7,3 +7,32 @@
 1724640758137	Copy package
 1724640767041	Copy package
 1724640774914	Copy package
+1724651610343	Rename resource 'application.properties'
+1724652799938	Copy compilation unit
+1724652807791	Copy compilation unit
+1724652822433	Rename type 'ProjectMember'
+1724652833116	Copy compilation unit
+1724652969874	Rename type 'WebSecurityCongig'
+1724653445383	Rename package 'templates.layouts.project'
+1724653477037	Copy package
+1724653491708	Copy package
+1724653499330	Copy package
+1724654755160	Rename package 'templates.User'
+1724658006692	Delete element
+1724658011227	Copy file
+1724658016294	Rename resource 'index.html'
+1724658408258	Extract local variable 'optUser'
+1724658413910	Extract local variable 'orElseThrow'
+1724658879742	Extract local variable 'user'
+1724661240446	Copy file
+1724661258639	Rename resource 'index.html'
+1724739354771	Extract local variable 'projectList'
+1724740831442	Copy file
+1724741797709	Extract local variable 'byUsername'
+1724743240578	Extract local variable 'byId'
+1724747330567	Copy file
+1724747496920	Extract local variable 'optProject'
+1724747537341	Extract local variable 'project'
+1724747654499	Extract local variable 'originProject'
+1724747884058	Extract local variable 'project'
+1724747925439	Copy file

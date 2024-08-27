@@ -1,0 +1,19 @@
+package com.kosta.service;
+
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import com.kosta.entity.User;
+import com.kosta.repository.UserRepo;
+
+public class IUserDetailsService implements UserDetailsService{
+	private final UserRepo userRepo;
+	
+	// 로그인
+	@Override
+	public User loadUserByUsername(String username) {
+		Optional<User> optUser = userRepo.findByUsername(username);
+		return optUser.orElseThrow(() -> new IllegalAccessException(username + " 없음"));;
+	}
+}

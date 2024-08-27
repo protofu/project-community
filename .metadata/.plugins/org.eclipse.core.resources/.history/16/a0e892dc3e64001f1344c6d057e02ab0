@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/index}"	
+>
+
+<div class="container">
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+		<div class="col" th:each="project : ${list}">
+			<div class="card mt-4 border border-2 border-success" style="height: 150px">
+				<div class="card-header bg-success-subtle">
+					[[${project.id}]]
+				</div>
+				<div
+					class="card-body"
+					th:onclick="|location.href='/blog/detail/'+${article.id}|"
+					role='button'
+				>
+					<h5 class="card-title">[[${project.name}]]</h5>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</html>

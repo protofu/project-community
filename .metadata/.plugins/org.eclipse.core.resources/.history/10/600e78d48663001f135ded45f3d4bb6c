@@ -1,0 +1,32 @@
+package com.kosta.service;
+
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
+
+import com.kosta.entity.User;
+import com.kosta.repository.UserRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class IUserDetailsService implements UserDetailsService{
+	private final UserRepo userRepo;
+	
+	// 로그인
+	@Override
+	public User loadUserByUsername(String nickname) {
+		System.out.println(nickname + "<------");
+		Optional<User> optUser = userRepo.findByUsername(nickname);
+		User user = optUser.orElseThrow(() -> new IllegalArgumentException(nickname + " 없음"));
+		return user;
+	}
+}
+select 
+	u1_0.id,u1_0.created_at,u1_0.email,u1_0.name,u1_0.nickname,u1_0.password,u1_0.role,u1_0.updated_at 
+from 
+	user_tbl u1_0 
+where 
+	u1_0.nickname=?

@@ -31,6 +31,6 @@ public class PMember {
 	
 	// 프로젝트에 속한 User id
 	@JoinColumn(name="pmember_id")
-	@ManyToMany
+	@ManyToOne
 	private User member;
 }

@@ -1,0 +1,65 @@
+package com.kosta.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import lombok.RequiredArgsConstructor;
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class WebSecurityConfig {
+	
+//	// 로그인 빈
+//	@Bean
+//	
+	
+	// 암호화 빈
+	@Bean
+	BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	// HTTP 요청에 따른 보안 구성
+	// 개발 초기 모두 열어놓기
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests(auth -> 
+			auth.requestMatchers(
+					new AntPathRequestMatcher("/"),
+					new AntPathRequestMatcher("/err"),
+					new AntPathRequestMatcher("/join"),
+					new AntPathRequestMatcher("/login"),
+					new AntPathRequestMatcher("/index"),
+					new AntPathRequestMatcher("/project/list"),
+					new AntPathRequestMatcher("/community/list")
+				).permitAll()
+					// MEMBER, MAINTAINER는 접근 가능
+					.requestMatchers(
+						new AntPathRequestMatcher("/myproject/**"),
+						new AntPathRequestMatcher("/project/**"),
+						new AntPathRequestMatcher("/community/**")
+					).hasAnyRole("MEMBER", "MAINTAINER")
+					// MAINTAINER만 접근 가능
+					.requestMatchers(
+						new AntPathRequestMatcher("/maintain/**")
+					).hasRole("MAINTAINER")
+					.anyRequest().authenticated()
+			);
+		
+		http.formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/"));
+		http.logout(logout -> logout.logoutSuccessUrl("/").invalidateHttpSession(true));
+		http.csrf(AbstractHttpConfigurer::disable);
+		http.cors(AbstractHttpConfigurer::disable);
+		
+		
+		return http.getOrBuild();
+	}
+	
+}

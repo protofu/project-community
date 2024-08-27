@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/index}"	
+>
+<main layout:fragment="main" class="container my-5">
+	<form action="/project/add" method="POST">
+		<input type="text" name="name" />
+	
+	</form>
+</main>
+</html>

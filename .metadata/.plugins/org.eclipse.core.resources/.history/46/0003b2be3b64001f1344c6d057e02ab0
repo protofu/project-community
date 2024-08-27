@@ -1,0 +1,22 @@
+package com.kosta.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.kosta.entity.Project;
+import com.kosta.repository.ProjectRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class IProjectService implements ProjectService {
+	private final ProjectRepo projectRepo = null;
+	
+	@Override
+	public List<Project> findAll() {
+		return projectRepo.findAll();
+	}
+
+}

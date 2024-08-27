@@ -1,0 +1,12 @@
+package com.kosta.service;
+
+import com.kosta.domain.UserDTO;
+import com.kosta.entity.User;
+
+public interface UserService {
+	void join(UserDTO userDTO);
+
+	User findByUsername(String username);
+
+	User findById(Long maintainerId);
+}

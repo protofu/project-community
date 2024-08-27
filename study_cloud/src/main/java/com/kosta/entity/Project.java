@@ -1,5 +1,6 @@
 package com.kosta.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -39,10 +40,10 @@ public class Project {
 	private String description;
 	
 	@Column(name="started_at")
-	private LocalDateTime startAt;
+	private LocalDate startAt;
 	
 	@Column(name="ended_at")
-	private LocalDateTime endAt;
+	private LocalDate endAt;
 	
 	@CreatedDate
 	@Column(name="created_at")

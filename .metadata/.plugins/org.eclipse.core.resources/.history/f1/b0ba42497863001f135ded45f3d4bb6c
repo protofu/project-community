@@ -1,0 +1,6 @@
+package com.kosta.service;
+
+@Service
+public class IUserService implements UserService {
+
+}

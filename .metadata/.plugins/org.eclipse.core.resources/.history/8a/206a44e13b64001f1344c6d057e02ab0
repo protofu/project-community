@@ -1,0 +1,19 @@
+package com.kosta.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.kosta.service.ProjectService;
+
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+public class ProjectController {
+	private final ProjectService projectService;
+	
+	@GetMapping("/project/list")
+	public String listPage() {
+		return "project/list";
+	}
+}

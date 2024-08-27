@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/index}"	
+>
+<main layout:fragment="main" class="container my-5">
+	<form action="/project/add" method="POST">
+		<label for="name" type="form-label">프로젝트 이름</label>
+		<input type="text" id="name" name="name" placeholder="프로젝트 명"/>
+		<textarea name="description" placeholder="프로젝트 설명"></textarea>
+		<input type="hidden" name="name" placeholder="프로젝트 명"/>
+	</form>
+</main>
+</html>
