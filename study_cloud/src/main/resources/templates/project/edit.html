@@ -4,14 +4,14 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/index}">
 <main layout:fragment="main" class="container my-5">
-	<form action="/project/add" method="POST">
+	<form action="/project/edit" th:method="POST">
 		<h2>"[[ ${ project.name } ]]" -- 수정</h2>
 		<div class="container my-5">
-			<input type="hidden" name="maintainerId" th:value="${user.id}" /> 
+			<input type="hidden" name="id" th:value="${ project.id }" />
 			<label for="name" class="form-label">프로젝트 이름</label> 
 			<input type="text" id="name" class="form-control" name="name" th:value="${project.name}"/>
 			<label for="description" class="form-label">프로젝트 설명</label>
-			<textarea id="description" class="form-control" name="description">[[ ${ project.description } ]]</textarea>
+			<textarea id="description" class="form-control" name="description" th:text="${ project.description }"></textarea>
 			<div class="mb-3">
 				<label for="startAt" class="form-label">프로젝트 시작일</label> 
 				<input

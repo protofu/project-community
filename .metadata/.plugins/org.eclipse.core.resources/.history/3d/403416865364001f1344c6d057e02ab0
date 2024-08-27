@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+	<form action="/project/edit" th:method="PATCH">
+		<h2>"[[ ${ project.name } ]]" -- 수정</h2>
+		<div class="container my-5">
+			<input type="hidden" name="maintainerId" th:value="${user.id}" /> 
+			<label for="name" class="form-label">프로젝트 이름</label> 
+			<input type="text" id="name" class="form-control" name="name" th:value="${project.name}"/>
+			<label for="description" class="form-label">프로젝트 설명</label>
+			<textarea id="description" class="form-control" name="description">[[ ${ project.description } ]]</textarea>
+			<div class="mb-3">
+				<label for="startAt" class="form-label">프로젝트 시작일</label> 
+				<input
+					type="date" id="startAt" name="startAt"
+					class="form-control" th:value="${project.startAt}" required>
+			</div>
+			<div class="mb-3">
+				<label for="endAt" class="form-label">프로젝트 종료일</label> 
+				<input
+					type="date" id="endAt" name="endAt"
+					class="form-control" th:value="${project.endAt}" required>
+			</div>
+			<button class="btn btn-primary ms-auto">제출</button>
+		</div>
+	</form>
+</main>
+</html>
