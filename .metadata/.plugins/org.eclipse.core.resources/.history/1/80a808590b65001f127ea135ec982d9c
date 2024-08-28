@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<head>
+    <style>
+        .project-list-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .project-header h3 {
+            margin: 0;
+        }
+        .project-footer {
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            text-align: right;
+        }
+    </style>
+</head>
+    <main layout:fragment="main" class="container my-5">
+        <!-- 진행 중인 프로젝트 목록 -->
+        <h1 class="mb-4">현재 진행중인 프로젝트 목록</h1>
+        <div class="row">
+            <div class="col-12" th:each="project : ${list}">
+                <div class="project-list-item">
+                    <div class="project-header">
+                        <div>
+                            <h3 class="project-title" th:text="${project.name}">프로젝트 이름</h3>
+                            <div>팀장: <span th:text="${project.maintainer.username}">팀장</span></div>
+                        </div>
+                        <div class="text-muted">
+                            <cite title="Started At" th:text="${project.startAt}">시작일</cite> ~ 
+                            <cite title="Ended At" th:text="${project.endAt}">종료일</cite>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                    	<div>
+	                        <button 
+	                            class="btn btn-info me-2" 
+	                            data-bs-toggle="modal" 
+	                            th:attr="data-bs-target='#myModal-' + ${project.id}">
+	                            Info
+	                        </button>
+                        </div>
+                        <!-- 삭제 및 편집 버튼 표시 조건 -->
+                        <div th:if="${user.id} == ${project.maintainer.id}">
+                            <form action="/project/delete" method="POST" class="d-inline">
+                                <input type="hidden" name="id" th:value="${project.id}" />
+                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                            </form>
+                            <form action="/project/edit" method="GET" class="d-inline">
+                                <input type="hidden" name="id" th:value="${project.id}" />
+                                <button class="btn btn-warning btn-sm">Edit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 모달 -->
+                    <div class="modal fade" th:id="'myModal-' + ${project.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" th:text="${project.name}">프로젝트 이름</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="d-flex justify-content-between mb-3 text-muted">
+                                        <cite title="Started At" th:text="${project.startAt}">시작일</cite> ~ 
+                                        <cite title="Ended At" th:text="${project.endAt}">종료일</cite>
+                                    </div>
+                                    <p class="text-wrap" th:utext="${project.description}">프로젝트 설명</p>
+                                    <!-- 팝오버 버튼 -->
+                                    <button type="button" class="btn btn-primary mt-3" 
+                                            id="membersPopoverBtn-${project.id}" 
+                                            data-bs-toggle="popover" 
+                                            data-bs-html="true" 
+                                            title="Members">
+                                        Show Members
+                                    </button>
+                                    <!-- 팝오버 내용 (자바스크립트에서 설정) -->
+                                    <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var membersBtn = document.getElementById('membersPopoverBtn-${project.id}');
+                                        new bootstrap.Popover(membersBtn, {
+                                            content: `
+                                                <ul>
+                                                    <li th:each="member : ${project.members}" th:text="${member.username}">Member Name</li>
+                                                </ul>
+                                            `,
+                                            html: true,
+                                            placement: 'bottom'
+                                        });
+                                    });
+                                    </script>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                    <form th:if="${!myProjectList.contains(project)}" action="/myproject/join" method="POST">
+                                        <input type="hidden" name="projectId" th:value="${project.id}" />
+                                        <button class="btn btn-success">Join Project</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 프로젝트 생성 버튼 -->
+            <form action="/project/add" method="GET" class="text-center mt-4">
+                <button class="btn btn-success btn-sm" type="submit">Create</button>
+            </form>
+        </div>
+
+        <!-- 참여 중인 프로젝트 목록 -->
+        <h1 class="mt-5 mb-4">참여 중인 프로젝트 목록</h1>
+        <div class="row">
+            <div class="col-12" th:each="project : ${myProjectList}">
+                <div class="project-list-item">
+                    <div class="project-header">
+                        <div>
+                            <h3 class="project-title" th:text="${project.name}">프로젝트 이름</h3>
+                            <div>팀장: <span th:text="${project.maintainer.username}">팀장</span></div>
+                        </div>
+                        <div class="text-muted">
+                            <cite title="Started At" th:text="${project.startAt}">시작일</cite> ~ 
+                            <cite title="Ended At" th:text="${project.endAt}">종료일</cite>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <!-- 프로젝트 설명 -->
+                        <p th:utext="${project.description}">프로젝트 설명</p>
+                    </div>
+                    <div class="project-footer">
+                        <button 
+                            class="btn btn-info me-2" 
+                            data-bs-toggle="modal" 
+                            th:attr="data-bs-target='#myModal-' + ${project.id}">
+                            Info
+                        </button>
+                        <!-- 참여 중인 프로젝트에서만 제공되는 버튼 -->
+                        <form action="/myproject/leave" method="POST" class="d-inline">
+                            <input type="hidden" name="projectId" th:value="${project.id}" />
+                            <button class="btn btn-danger btn-sm">Leave Project</button>
+                        </form>
+                    </div>
+                    <!-- 모달 -->
+                    <div class="modal fade" th:id="'myModal-' + ${project.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" th:text="${project.name}">프로젝트 이름</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="d-flex justify-content-between mb-3 text-muted">
+                                        <cite title="Started At" th:text="${project.startAt}">시작일</cite> ~ 
+                                        <cite title="Ended At" th:text="${project.endAt}">종료일</cite>
+                                    </div>
+                                    <p class="text-wrap" th:utext="${project.description}">프로젝트 설명</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                    <!-- Leave Project 버튼 -->
+                                    <form action="/myproject/leave" method="POST">
+                                        <input type="hidden" name="projectId" th:value="${project.id}" />
+                                        <button class="btn btn-danger">Leave Project</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</html>

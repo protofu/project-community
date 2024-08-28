@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Role Check</title>
+</head>
+<body>
+    <h1>User Authorities</h1>
+    <ul>
+        <li th:each="authority : ${authorities}" th:text="${authority.authority}"></li>
+    </ul>
+</body>
+</html>

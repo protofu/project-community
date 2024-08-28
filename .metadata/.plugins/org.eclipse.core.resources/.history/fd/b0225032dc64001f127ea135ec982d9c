@@ -1,0 +1,9 @@
+package com.kosta.service;
+
+import com.kosta.entity.Project;
+
+public interface MyProjectService {
+
+	Project findAllById(Long id);
+
+}

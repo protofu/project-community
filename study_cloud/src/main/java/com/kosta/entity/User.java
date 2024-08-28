@@ -1,6 +1,7 @@
 package com.kosta.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +22,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,7 @@ public class User implements UserDetails {
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.ROLE_USER;
+    private UserRole role = UserRole.USER;
     
     @CreatedDate
     @Column(name="created_at")
@@ -64,11 +64,8 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 사용자의 역할을 권한으로 변환
-        return List.of(new SimpleGrantedAuthority(this.role.name())); 
-    }
-
-    @Override
-    public String getUsername() {
-        return username; // nickname을 사용자 식별자로 사용
+    	List<SimpleGrantedAuthority> roleList = new ArrayList<>();
+    	roleList.add(new SimpleGrantedAuthority("ROLE_"+role.name()));
+        return roleList; 
     }
 }

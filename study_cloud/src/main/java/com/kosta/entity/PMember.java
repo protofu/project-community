@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class PMember {
 	private Project project;
 	
 	// 프로젝트에 속한 User id
-	@JoinColumn(name="pmember_id")
+	@JoinColumn(name="user_id")
 	@ManyToOne
 	private User member;
 }

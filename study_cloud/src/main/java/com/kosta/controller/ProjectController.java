@@ -2,20 +2,22 @@ package com.kosta.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.kosta.entity.PMember;
 import com.kosta.entity.Project;
 import com.kosta.entity.User;
+import com.kosta.service.MyProjectService;
 import com.kosta.service.ProjectService;
 import com.kosta.service.UserService;
 
@@ -26,13 +28,32 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/project/*")
 public class ProjectController {
 	private final ProjectService projectService;
+	private final MyProjectService myProjectService;
 	private final UserService userService;
 	
 	@GetMapping("/list")
-	public String listPage(Model model, @AuthenticationPrincipal User user) {
+	public String listPage(@RequestParam(value="pId", required = false) Long pId , Model model, @AuthenticationPrincipal User user) {
 		List<Project> projectList = projectService.findAll();
-		model.addAttribute("list", projectList);
+		List<Project> myPro = myProjectService.findAllById(user.getId());
+		
+		// myPro에 있는 프로젝트 ID 목록을 생성합니다
+	    Set<Long> myProIds = myPro.stream()
+	                              .map(Project::getId)
+	                              .collect(Collectors.toSet());
+
+	    // projectList에서 myPro에 포함된 프로젝트를 제외합니다
+	    List<Project> filteredProjectList = projectList.stream()
+	        .filter(project -> !myProIds.contains(project.getId()))
+	        .collect(Collectors.toList());
+	    
+		model.addAttribute("list", filteredProjectList);
 		model.addAttribute("user", user);
+		model.addAttribute("myProjectList", myPro);
+	    // pId가 제공되면 해당 프로젝트의 멤버 리스트를 추가로 조회
+	    if (pId != null) {
+	        List<PMember> memberList = projectService.findAllByProjectId(pId);
+	        model.addAttribute("memberList", memberList);
+	    }
 		return "project/list";
 	}
 	
@@ -45,15 +66,16 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/add")
-	public String add(Project project, @RequestParam("maintainerId") Long maintainerId) {
+	public String add(Project project, @RequestParam("maintainerId") Long maintainerId, @AuthenticationPrincipal User user) {
 		User maintainer = userService.findById(maintainerId);
 		project.setMaintainer(maintainer);
 		System.out.println(project.getStartAt());
-		projectService.save(project);
+		projectService.save(project, user);
+		
 		return "redirect:/project/list";
 	}
 	
-	@DeleteMapping("/delete")
+	@PostMapping("/delete")
 	public String delete(@RequestParam("id") Long id) {
 		projectService.delete(id);
 		return "redirect:/project/list";
@@ -70,20 +92,14 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/edit")
-	public String edit(@RequestParam("id") Long id, Project project) {
+	public String edit(@RequestParam("id") Long id, Project project, @AuthenticationPrincipal User user) {
 		Project originProject = projectService.findById(id);
 		originProject.setName(project.getName());
 		originProject.setDescription(project.getDescription());
 		originProject.setStartAt(project.getStartAt());
 		originProject.setEndAt(project.getEndAt());
-		projectService.save(originProject);
-		return "redirect:/project/detail/" + id;
+		projectService.save(originProject, user);
+		return "redirect:/project/list";
 	}
 	
-	@GetMapping("/detail/{id}")
-	public String detailPage(@PathVariable("id") Long id, Model model) {
-		Project project = projectService.findById(id);
-		model.addAttribute("project", project);
-		return "project/detail";
-	}
 }

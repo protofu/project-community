@@ -26,6 +26,9 @@ public class Community {
 	@Column(updatable = false)
 	private Long id;
 	
+	@Column(nullable = false)
+	private String title;
+	
 	@JoinColumn(name="creator_id")
 	@ManyToOne
 	private User creator;
@@ -38,5 +41,5 @@ public class Community {
 	private LocalDateTime createAt;
 	
 	@Column(name="is_deleted")
-	private String isDeleted;
+	private String isDeleted = "n";
 }

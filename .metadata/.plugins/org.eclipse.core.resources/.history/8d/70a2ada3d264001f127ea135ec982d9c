@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/index}">
+<script type="text/javascript">
+	const myModal = document.getElementById('myModal')
+	const myInput = document.getElementById('myInput')
+	
+	myModal.addEventListener('shown.bs.modal', () => {
+	  myInput.focus()
+	})
+</script>
+<main layout:fragment="main" class="container my-5">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  		...
+	</div>
+	
+</main>
+
+</html>

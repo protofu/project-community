@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+    <h1>현재 진행중인 프로젝트 목록</h1>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" th:each="project : ${list}">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="card-title" th:text="${project.name}">프로젝트 이름</h3>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p th:text="${project.description}">프로젝트 설명</p>
+                        <footer class="blockquote-footer">
+                            <cite title="Started At" th:text="${project.startAt}">시작일</cite> ~ 
+                            <cite title="Ended At" th:text="${project.endAt}">종료일</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+                <div class="card-footer text-muted">
+                    팀장 : <span th:text="${project.maintainer.username}">팀장</span>
+
+                    <!-- 삭제 버튼 표시 조건 -->
+                    <div th:if="${user.id} == ${project.maintainer.id}">
+                        <form action="/project/delete" method="POST" class="float-end me-2">
+                            <input type="hidden" name="id" th:value="${project.id}" />
+                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                        <form action="/project/edit" class="float-end me-2">
+                            <input type="hidden" name="id" th:value="${project.id}" />
+                            <button class="btn btn-warning btn-sm">Edit</button>
+                        </form>
+                    </div>
+                    <button class="btn btn-info btn-sm float-end me-2" data-bs-toggle="modal" data-bs-target="#myModal">Info</button>
+                	<!-- 모달 -->
+					<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">[[ ${ project.name } ]]</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<!-- 모달 내용 -->
+									<p>모달 내용이 여기에 들어갑니다.</p>
+									<input type="text" id="myInput" class="form-control">
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+									<button type="button" class="btn btn-success">참가</button>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+        <!-- 프로젝트 생성 버튼 -->
+        <form action="/project/add" class="float-end me-2" method="GET">
+            <button class="btn btn-success btn-sm" type="submit">Create</button>
+        </form>
+    </div>
+</main>
+</html>

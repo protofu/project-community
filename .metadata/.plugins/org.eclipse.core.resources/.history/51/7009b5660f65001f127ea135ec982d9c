@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+    <h1 class="mb-3" th:text="${comm.title}">제목</h1>
+    <p class="text-muted mb-4">
+        작성일: [[ ${ #temporals.format(comm.createAt, 'yy-MM-dd HH:mm') } ]]
+    </p>
+    <hr/>
+    <div th:utext="${comm.content}">내용</div>
+    <hr/>
+    <div class="d-flex justify-content-between">
+        <a href="#" class="btn btn-primary" th:href="@{/community/list}">목록으로 돌아가기</a>
+        <div>
+            <a href="#" class="btn btn-secondary me-2" th:href="@{/community/edit/{id}(id=${comm.id})}">수정</a>
+            
+            <form action="/community/delete" method="POST" class="d-inline">
+                <input type="hidden" name="id" th:value="${comm.id}" />
+                <button class="btn btn-danger">삭제</button>
+            </form>
+        </div>
+    </div>
+</main>
+</html>

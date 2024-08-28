@@ -1,0 +1,26 @@
+package com.kosta.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.kosta.entity.PMember;
+import com.kosta.entity.Project;
+import com.kosta.repository.MyProjectRepo;
+import com.kosta.repository.PMemberRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class IMyProjectService implements MyProjectService {
+	private final MyProjectRepo myProjectRepo;
+
+	
+	@Override
+	public List<Project> findAllById(Long id) {
+		List<Project> projectList = myProjectRepo.findAllById(id);
+		return projectList;
+	}
+
+}

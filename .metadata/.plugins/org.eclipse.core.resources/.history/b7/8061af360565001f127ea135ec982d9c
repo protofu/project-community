@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+	<label for="title" class="form-label"> 제목 </label>
+    <input id="title" type="text" name="title" class="form-control" placeholder="제목을 입력" required/>
+	<label for="content" class="form-label"> 글 작성 </label>
+    <textarea id="content" name="content" class="form-control" rows="50" cols="50" required></textarea>
+</main>
+</html>

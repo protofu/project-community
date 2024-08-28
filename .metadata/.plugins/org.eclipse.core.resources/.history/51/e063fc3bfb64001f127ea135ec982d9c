@@ -1,0 +1,41 @@
+package com.kosta.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.kosta.entity.PMember;
+import com.kosta.entity.Project;
+import com.kosta.repository.MyProjectRepo;
+import com.kosta.repository.PMemberRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class IMyProjectService implements MyProjectService {
+	private final MyProjectRepo myProjectRepo;
+	private final PMemberRepo pMemberRepo;
+
+	
+	@Override
+	public List<Project> findAllById(Long id) {
+		List<PMember> memberList = pMemberRepo.findAllByMemberId(id);
+		List<Project> projectList = new ArrayList<>();
+		for (PMember p : memberList) {
+			Optional<Project> optProject = myProjectRepo.findById(p.getProject().getId());
+			Project project = optProject.orElseThrow(() -> new IllegalArgumentException("프로젝트가 없음"));
+			projectList.add(project);
+		}
+		return projectList;
+	}
+
+
+	@Override
+	public void leave(Long id, Long pId) {
+		pMemberRepo.deleteByMemberIdAndProjectId(id, pId);
+	}
+
+}

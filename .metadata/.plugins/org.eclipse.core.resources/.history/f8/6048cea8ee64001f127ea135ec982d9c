@@ -1,0 +1,19 @@
+package com.kosta.service;
+
+import java.util.List;
+
+import com.kosta.entity.Project;
+
+public interface ProjectService {
+
+	List<Project> findAll();
+
+	void save(Project project);
+
+	void delete(Long id);
+
+	Project findById(Long id);
+
+	List<Project> findAllById();
+
+}

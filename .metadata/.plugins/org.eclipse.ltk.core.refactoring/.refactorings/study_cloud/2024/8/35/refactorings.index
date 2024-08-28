@@ -36,3 +36,20 @@
 1724747654499	Extract local variable 'originProject'
 1724747884058	Extract local variable 'project'
 1724747925439	Copy file
+1724804721410	Delete element
+1724807610473	Rename package 'templates.PMember'
+1724807616891	Copy file
+1724808059147	Rename type 'PMemberRepo'
+1724808110745	Extract local variable 'project'
+1724808200155	Extract local variable 'projectList'
+1724809209622	Rename type 'PMember'
+1724814065376	Extract local variable 'projectIdList'
+1724814094445	Extract local variable 'project'
+1724814171417	Extract local variable 'project'
+1724815003834	Extract local variable 'myPro'
+1724825064110	Extract local variable 'commList'
+1724825075782	Extract local variable 'commList'
+1724825255384	Copy file
+1724825258169	Rename resource 'list2.html'
+1724829369690	Extract local variable 'optComm'
+1724829407021	Extract local variable '채ㅡㅡ'

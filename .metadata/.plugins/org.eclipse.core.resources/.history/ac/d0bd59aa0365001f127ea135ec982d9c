@@ -1,0 +1,32 @@
+package com.kosta.controller;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.kosta.entity.Community;
+import com.kosta.service.CommunityService;
+
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/community/*")
+public class CommunityController {
+	private final CommunityService commService;
+	
+	@GetMapping("/list")
+	public String listPage(Model model) {
+		List<Community> commList = commService.findAll();
+		model.addAttribute("commList", commList);
+		return "community/list";
+	}
+	
+	@GetMapping("/add")
+	public String addPage() {
+		return "community/add";
+	}
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+    <h1>글 목록</h1>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Date</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="comm : ${commList}">
+                    <td th:text="${comm.title}">Title</td>
+                    <td th:text="${comm.content}">Content</td>
+                    <td th:text="${comm.creator.username}">Author</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-5 d-flex justify-content-end align-items-center">
+        <form action="/community/add">
+            <button class="btn btn-success btn-sm">New Post</button>
+        </form>
+    </div>
+</main>
+</html>

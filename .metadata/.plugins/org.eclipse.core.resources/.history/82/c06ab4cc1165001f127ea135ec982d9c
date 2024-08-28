@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+    <!-- 진행 중인 프로젝트 목록 -->
+    <h1>PROJECT LIST</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Maintainer</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="project : ${list}">
+                <td th:text="${project.name}">Project Name</td>
+                <td th:text="${project.maintainer.username}">Maintainer</td>
+                <td th:text="${#temporals.format(project.startAt, 'yy-MM-dd')}">Start Date</td>
+                <td th:text="${#temporals.format(project.endAt, 'yy-MM-dd')}">End Date</td>
+                <td>
+                    <!-- 삭제 및 수정 버튼 표시 조건 -->
+                    <div th:if="${user.id} == ${project.maintainer.id}" class="d-flex">
+                        <form action="/project/delete" method="POST" class="me-2">
+                            <input type="hidden" name="id" th:value="${project.id}" />
+                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                        <form action="/project/edit" method="GET">
+                            <input type="hidden" name="id" th:value="${project.id}" />
+                            <button class="btn btn-warning btn-sm">Edit</button>
+                        </form>
+                    </div>
+                    <button 
+                        class="btn btn-info btn-sm d-inline" 
+                        data-bs-toggle="modal" 
+                        th:attr="data-bs-target='#myModal-' + ${project.id}">
+                        Info
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 프로젝트 생성 버튼 -->
+    <form action="/project/add" method="GET" class="mb-4">
+        <button class="btn btn-success btn-sm" type="submit">Create</button>
+    </form>
+
+    <!-- 참여 중인 프로젝트 목록 -->
+    <h1 class="mt-5">JOINED PROJECTS</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Maintainer</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="project : ${myProjectList}">
+                <td th:text="${project.name}">Project Name</td>
+                <td th:text="${project.maintainer.username}">Maintainer</td>
+                <td th:text="${#temporals.format(project.startAt, 'yy-MM-dd')}">Start Date</td>
+                <td th:text="${#temporals.format(project.endAt, 'yy-MM-dd')}">End Date</td>
+                <td>
+                    <!-- 삭제 및 수정 버튼 표시 조건 -->
+                    <div th:if="${user.id} == ${project.maintainer.id}" class="d-flex">
+                        <form action="/project/delete" method="POST" class="me-2">
+                            <input type="hidden" name="id" th:value="${project.id}" />
+                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                        <form action="/project/edit" method="GET">
+                            <input type="hidden" name="id" th:value="${project.id}" />
+                            <button class="btn btn-warning btn-sm">Edit</button>
+                        </form>
+                    </div>
+                    <button 
+                        class="btn btn-info btn-sm" 
+                        data-bs-toggle="modal" 
+                        th:attr="data-bs-target='#myModal-' + ${project.id}">
+                        Info
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 모달들 -->
+    <div th:each="project : ${list}">
+        <div class="modal fade" th:id="'myModal-' + ${project.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" th:text="${project.name}">Project Name</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-end mb-3">
+                            <cite th:text="${project.startAt}">Start Date</cite> ~ 
+                            <cite th:text="${project.endAt}">End Date</cite>
+                        </div>
+                        <p style="white-space: pre-wrap;" th:utext="${project.description}">Project Description</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form th:if="${!myProjectList.contains(project)}" action="/myproject/join" method="POST">
+                            <input type="hidden" name="projectId" th:value="${project.id}" />
+                            <button class="btn btn-success">Join Project</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</html>

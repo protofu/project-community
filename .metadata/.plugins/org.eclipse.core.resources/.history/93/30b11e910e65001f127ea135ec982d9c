@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+	<h1 class="mb-4">디테일</h1>
+	[[ ${ comm.title } ]]
+	작성일 : [[ ${ #temporals.format(comm.createAt, 'yy-MM-dd HH:mm') } ]]
+	<hr/>
+	[[ ${ comm.content } ]]
+	
+</main>
+</html>

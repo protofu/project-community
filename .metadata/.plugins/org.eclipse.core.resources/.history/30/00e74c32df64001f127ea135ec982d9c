@@ -1,0 +1,13 @@
+package com.kosta.service;
+
+import org.springframework.stereotype.Service;
+
+import com.kosta.repository.PMemberRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class IPMemberService implements PMemberService {
+	private final PMemberRepo pMemberRepo;
+}

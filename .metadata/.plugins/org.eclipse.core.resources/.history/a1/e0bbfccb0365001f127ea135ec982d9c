@@ -1,0 +1,24 @@
+package com.kosta.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.kosta.entity.Community;
+import com.kosta.repository.CommunityRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ICommunityService implements CommunityService {
+	private final CommunityRepo commRepo;
+
+	@Override
+	public List<Community> findAll() {
+		List<Community> commList = commRepo.findAll();
+		return commList;
+	}
+	
+	
+}

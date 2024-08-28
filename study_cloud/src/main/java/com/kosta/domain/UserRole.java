@@ -1,9 +1,9 @@
 package com.kosta.domain;
 
 public enum UserRole {
-	ROLE_USER("ROLE_USER"),
-	ROLE_MEMBER("ROLE_MEMBER"),
-	ROLE_MAINTAINER("ROLE_MAINTAINER");
+	USER("ROLE_USER"),
+	MEMBER("ROLE_MEMBER"),
+	MAINTAINER("ROLE_MAINTAINER");
 	
 	String  role;
 	

@@ -1,0 +1,16 @@
+package com.kosta.service;
+
+import org.springframework.stereotype.Service;
+
+import com.kosta.entity.Project;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class IMyProjectService implements MyProjectService {@Override
+	public Project findAllById(Long id) {
+		return null;
+	}
+	
+}
