@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class CommunityController {
 	private final CommunityService commService;
 	
+	//	글 목록
 	@GetMapping("/list")
 	public String listPage(Model model) {
 		List<Community> commList = commService.findAll();
@@ -31,11 +32,13 @@ public class CommunityController {
 		return "community/list";
 	}
 	
+	// 글 추가 페이지
 	@GetMapping("/add")
 	public String addPage() {
 		return "community/add";
 	}
 	
+	// 글 추가 동작
 	@PostMapping("/add")
 	public String add(Community comm, @AuthenticationPrincipal User user) {
 		comm.setCreator(user);
@@ -43,6 +46,7 @@ public class CommunityController {
 		return "redirect:/community/list";
 	}
 	
+	// 글 상세 보기 페이지
 	@GetMapping("/detail/{id}")
 	public String detailPage(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal User user) {
 		Community comm = commService.findById(id);
@@ -51,6 +55,7 @@ public class CommunityController {
 		return "community/detail";
 	}
 	
+	// 글 삭제
 	@DeleteMapping("/delete")
 	public String delete(@RequestParam("id") Long id) {
 		commService.delete(id);

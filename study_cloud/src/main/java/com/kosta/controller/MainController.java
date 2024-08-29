@@ -14,17 +14,20 @@ import lombok.RequiredArgsConstructor;
 public class MainController {
 	private final UserService userService;
 	
+	// 회원가입 페이지
 	@GetMapping("/join")
 	public String joinPage() {
 		return "user/join";
 	}
 	
+	// 회원가입 동작
 	@PostMapping("/join")
 	public String join(UserDTO userDTO) {
 		userService.join(userDTO);
 		return "redirect:/";
 	}
 	
+	// 로그인 페이지
 	@GetMapping("/login")
 	public String loginPage() {
 		return "user/login";

@@ -10,7 +10,7 @@ public interface ProjectService {
 
 	List<Project> findAll();
 
-	void save(Project project, User user);
+	void save(Project project, User user) throws Exception;
 
 	void delete(Long id);
 

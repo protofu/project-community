@@ -31,6 +31,7 @@ public class ProjectController {
 	private final MyProjectService myProjectService;
 	private final UserService userService;
 	
+	// 전체 프로젝트 목록 
 	@GetMapping("/list")
 	public String listPage(@RequestParam(value="pId", required = false) Long pId , Model model, @AuthenticationPrincipal User user) {
 		List<Project> projectList = projectService.findAll();
@@ -57,6 +58,7 @@ public class ProjectController {
 		return "project/list";
 	}
 	
+	// 프로젝트 추가
 	@GetMapping("/add")
 	public String addPage(Principal principal, Model model) {
 		String username = principal.getName();
@@ -65,8 +67,9 @@ public class ProjectController {
 		return "project/add";
 	}
 	
+	// 프로젝트 추가 동작
 	@PostMapping("/add")
-	public String add(Project project, @RequestParam("maintainerId") Long maintainerId, @AuthenticationPrincipal User user) {
+	public String add(Project project, @RequestParam("maintainerId") Long maintainerId, @AuthenticationPrincipal User user) throws Exception {
 		User maintainer = userService.findById(maintainerId);
 		project.setMaintainer(maintainer);
 		System.out.println(project.getStartAt());
@@ -75,12 +78,14 @@ public class ProjectController {
 		return "redirect:/project/list";
 	}
 	
+	// 프로젝트 삭제
 	@PostMapping("/delete")
 	public String delete(@RequestParam("id") Long id) {
 		projectService.delete(id);
 		return "redirect:/project/list";
 	}
 	
+	// 프로젝트 수정
 	@GetMapping("/edit")
 	public String editPage(@RequestParam("id") Long id, Principal principal, Model model) {
 		String username = principal.getName();
@@ -91,8 +96,9 @@ public class ProjectController {
 		return "project/edit";
 	}
 	
+	// 프로젝트 수정 동작
 	@PostMapping("/edit")
-	public String edit(@RequestParam("id") Long id, Project project, @AuthenticationPrincipal User user) {
+	public String edit(@RequestParam("id") Long id, Project project, @AuthenticationPrincipal User user) throws Exception {
 		Project originProject = projectService.findById(id);
 		originProject.setName(project.getName());
 		originProject.setDescription(project.getDescription());

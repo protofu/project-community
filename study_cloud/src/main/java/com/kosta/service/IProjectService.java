@@ -34,13 +34,16 @@ public class IProjectService implements ProjectService {
 	}
 
 	@Override
-	public void save(Project project, User user) {
+	public void save(Project project, User user) throws Exception {
+		if (project.getEndAt().isBefore(project.getStartAt())) {
+			throw new Exception("시작일과 종료일을 다시 설정하세요");
+		}
 		projectRepo.save(project);
 		// ROLE이 USER면 MEMBER로 바꾸기
 		if (user.getRole().equals(UserRole.USER) || user.getRole().equals(UserRole.MEMBER)) {
 			user.setRole(UserRole.MAINTAINER);
 			user = userRepo.save(user);
-			
+			// 권한 실시간 반영
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
 			updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + UserRole.MAINTAINER));
@@ -49,11 +52,13 @@ public class IProjectService implements ProjectService {
 		}
 	}
 
+	// 프로젝트 지우기
 	@Override
 	public void delete(Long id) {
 		projectRepo.deleteById(id);
 	}
 
+	// 프로젝트 ID로 찾기
 	@Override
 	public Project findById(Long id) {
 		Optional<Project> optProject = projectRepo.findById(id);
@@ -61,6 +66,7 @@ public class IProjectService implements ProjectService {
 		return project;
 	}
 
+	// 프로젝트 ID 를 통해 PMember에서 그 프로젝트에 속한 멤버 찾기
 	@Override
 	public List<PMember> findAllByProjectId(Long pId) {
 		List<PMember> memList = pMemberRepo.findAllByProjectId(pId);

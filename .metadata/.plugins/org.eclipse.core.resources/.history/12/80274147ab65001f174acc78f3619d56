@@ -1,0 +1,59 @@
+package com.kosta.controller;
+
+import java.util.List;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.kosta.entity.Community;
+import com.kosta.entity.User;
+import com.kosta.service.CommunityService;
+
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/community/*")
+public class CommunityController {
+	private final CommunityService commService;
+	
+	@GetMapping("/list")
+	public String listPage(Model model) {
+		List<Community> commList = commService.findAll();
+		model.addAttribute("commList", commList);
+		return "community/list";
+	}
+	
+	@GetMapping("/add")
+	public String addPage() {
+		return "community/add";
+	}
+	
+	@PostMapping("/add")
+	public String add(Community comm, @AuthenticationPrincipal User user) {
+		comm.setCreator(user);
+		commService.add(comm);
+		return "redirect:/community/list";
+	}
+	
+	@GetMapping("/detail/{id}")
+	public String detailPage(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal User user) {
+		Community comm = commService.findById(id);
+		model.addAttribute("comm", comm);
+		model.addAttribute("user", user);
+		return "community/detail";
+	}
+	
+	@DeleteMapping("/delete")
+	public String delete(@RequestParam("id") Long id) {
+		commService.delete(id);
+		return "redirect:/community/list";
+	}
+}

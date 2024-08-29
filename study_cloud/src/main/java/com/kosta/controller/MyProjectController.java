@@ -38,6 +38,7 @@ public class MyProjectController {
 	
 	private final UserRepo userRepo;
 	
+	// 프로젝트 참가
 	@PostMapping("/join")
 	public String joinProject(PMember pMember, @RequestParam("projectId") Long pId, @AuthenticationPrincipal User user) {
 		pMember.setMember(user);
@@ -47,7 +48,7 @@ public class MyProjectController {
 		if (user.getRole().equals(UserRole.USER)) {
 			user.setRole(UserRole.MEMBER);
 			user = userRepo.save(user);
-			
+			// 권한 실시간 반영
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
 			updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + UserRole.MEMBER));
@@ -57,6 +58,7 @@ public class MyProjectController {
 		return "redirect:/project/list";
 	}
 	
+	// 내가 참가하고 있는 프로젝트 목록
 	@GetMapping("/list")
 	public String myProjectListPage(@AuthenticationPrincipal User user, Model model) {
 		List<Project> myProjectList = myProjectService.findAllById(user.getId());
@@ -65,6 +67,7 @@ public class MyProjectController {
 		return "myproject/list";
 	}
 	
+	// 프로젝트 나가기
 	@DeleteMapping("/leave")
 	public String leave(@RequestParam("projectId") Long pId, @AuthenticationPrincipal User user) {
 		

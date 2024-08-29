@@ -1,5 +1,0 @@
-package com.kosta.config;
-
-public class WebSecurityConfig {
-
-}
