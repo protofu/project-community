@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/index}">
+<main layout:fragment="main" class="container my-5">
+<h2>[[ ${ project.name } ]]</h2>
+    <div class="container mt-5" th:each="project : ${ myProjectList }">
+    	
+    	<div>
+    		<h3>멤버 관리</h3>
+    		<table class="table table-striped" style="text-align: center;">
+                <thead>
+                    <tr>
+                    	<th>NO.</th>
+                        <th>Name</th>
+                        <th>Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="mem, idx : ${memList}">
+                    	<td th:text="${idx.count}"></td>
+                    	<td th:text="${mem.username}"></td>
+                        <td th:text="${mem.getRole())}">Date</td>
+                    </tr>
+                </tbody>
+            </table>
+    	</div>
+    </div>
+</main>
+</html>

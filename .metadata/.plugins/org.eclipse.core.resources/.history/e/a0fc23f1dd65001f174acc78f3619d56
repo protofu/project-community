@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: study_cloud
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://44.211.166.152:3306/study_cloud
+    username: root
+    password: 1234
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    open-in-view: false
+  sql:
+    init:
+      mode: never
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+server:
+  port: 80
